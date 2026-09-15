@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>A quiet space to check in with yourself.</h1>
+    <p class="lede">MindMate is a private, offline mental-wellness companion — track your mood,
+      journal your thoughts, and talk things through with a supportive chat companion, anytime.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('register') }}" class="btn">Get started — it's free</a>
+      <a href="{{ url_for('resources_page') }}" class="btn btn-outline">View resources</a>
+    </div>
+  </div>
+  <div class="hero-art">🌿</div>
+</section>
+
+<section>
+  <h2 style="margin-bottom:1.2rem;">What's inside</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <span class="icon">💬</span>
+      <h3>Supportive chat</h3>
+      <p>A rule-based companion that listens, detects your tone, and responds with grounding tips — fully offline, no data leaves your device.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">📈</span>
+      <h3>Mood tracking</h3>
+      <p>Log how you feel in seconds and watch patterns emerge over days and weeks on a simple chart.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">📓</span>
+      <h3>Private journal</h3>
+      <p>Write freely. Each entry is automatically tagged with a sentiment reading so you can track emotional trends.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">🧭</span>
+      <h3>Curated resources</h3>
+      <p>Self-help guidance by topic, plus verified crisis helpline numbers, always one click away.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

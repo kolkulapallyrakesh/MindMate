@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Hi {{ current_user.name.split(' ')[0] }} 👋</h1>
+<p style="color:var(--ink-soft); margin-top:-0.6rem;">Here's a snapshot of how you've been doing.</p>
+
+<div class="stat-row">
+  <div class="stat-card">
+    <span class="stat-value">{{ current_user.current_streak or 0 }}</span>
+    <span class="stat-label">Day streak</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-value">{{ current_user.longest_streak or 0 }}</span>
+    <span class="stat-label">Longest streak</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-value">{{ total_chats }}</span>
+    <span class="stat-label">Chat messages sent</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-value">{{ recent_journals|length }}</span>
+    <span class="stat-label">Recent journal entries</span>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Mood trend (last 14 check-ins)</h2>
+  {% if mood_values %}
+    <canvas id="moodChart" height="90"></canvas>
+  {% else %}
+    <p style="color:var(--ink-soft);">No mood data yet — log your first mood on the <a href="{{ url_for('mood_page') }}">Mood Tracker</a> page.</p>
+  {% endif %}
+</div>
+
+<div class="panel">
+  <h2>Recent journal entries</h2>
+  {% if recent_journals %}
+    {% for j in recent_journals %}
+      <div style="padding:0.7rem 0; border-bottom:1px solid #eee9db;">
+        <strong>{{ j.title }}</strong>
+        <span class="sentiment-pill sentiment-{{ j.sentiment_label }}">{{ j.sentiment_label }}</span>
+        <div class="journal-meta">{{ j.created_at.strftime('%d %b %Y, %I:%M %p') }}</div>
+      </div>
+    {% endfor %}
+    <a href="{{ url_for('journal_page') }}" style="display:inline-block; margin-top:1rem;">View all entries →</a>
+  {% else %}
+    <p style="color:var(--ink-soft);">Nothing here yet — try the <a href="{{ url_for('journal_page') }}">Journal</a>.</p>
+  {% endif %}
+</div>
+
+{% if mood_values %}
+<script>
+const ctx = document.getElementById('moodChart');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: {{ mood_labels|tojson }},
+    datasets: [{
+      label: 'Mood (1-5)',
+      data: {{ mood_values|tojson }},
+      borderColor: '#2f4538',
+      backgroundColor: 'rgba(168,195,161,0.35)',
+      tension: 0.35,
+      fill: true,
+      pointRadius: 4,
+    }]
+  },
+  options: {
+    scales: { y: { min: 0, max: 5, ticks: { stepSize: 1 } } },
+    plugins: { legend: { display: false } }
+  }
+});
+</script>
+{% endif %}
+{% endblock %}

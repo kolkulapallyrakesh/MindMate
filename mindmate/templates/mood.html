@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Mood Tracker{% endblock %}
+{% block content %}
+<h1>How are you, right now?</h1>
+
+<div class="panel">
+  <form method="POST">
+    <div class="mood-picker">
+      {% set moods = [(1,'😞','Rough'), (2,'😕','Low'), (3,'😐','Okay'), (4,'🙂','Good'), (5,'😄','Great')] %}
+      {% for value, emoji, label in moods %}
+        <label class="mood-option">
+          <input type="radio" name="mood_score" value="{{ value }}" {% if value == 3 %}checked{% endif %}>
+          {{ emoji }}
+          <span class="label">{{ label }}</span>
+        </label>
+      {% endfor %}
+    </div>
+    <div class="field">
+      <label for="note">Anything you want to add? (optional)</label>
+      <textarea id="note" name="note" placeholder="A quick note about why you feel this way…"></textarea>
+    </div>
+    <button type="submit" class="btn">Log mood</button>
+  </form>
+</div>
+
+{% if chart_values %}
+<div class="panel">
+  <h2>Your mood over time</h2>
+  <canvas id="moodTrendChart" height="90"></canvas>
+</div>
+<script>
+new Chart(document.getElementById('moodTrendChart'), {
+  type: 'line',
+  data: {
+    labels: {{ chart_labels|tojson }},
+    datasets: [{
+      label: 'Mood',
+      data: {{ chart_values|tojson }},
+      borderColor: '#c9a15f',
+      backgroundColor: 'rgba(201,161,95,0.25)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 3,
+    }]
+  },
+  options: { scales: { y: { min: 0, max: 5, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
+});
+</script>
+{% endif %}
+
+<div class="panel">
+  <h2>History</h2>
+  {% if entries %}
+    <ul class="mood-list">
+      {% for e in entries %}
+        {% set emojis = {1:'😞',2:'😕',3:'😐',4:'🙂',5:'😄'} %}
+        <li>
+          <div>
+            <span class="mood-emoji">{{ emojis[e.mood_score] }}</span>
+            {% if e.note %}{{ e.note }}{% else %}<em style="color:var(--ink-soft);">No note</em>{% endif %}
+            <span class="tag-source">{{ e.source }}</span>
+          </div>
+          <span class="mood-meta">{{ e.created_at.strftime('%d %b, %I:%M %p') }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p style="color:var(--ink-soft);">No entries yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

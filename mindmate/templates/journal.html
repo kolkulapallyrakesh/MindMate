@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Journal{% endblock %}
+{% block content %}
+<h1>Your journal</h1>
+
+<div class="panel">
+  <form method="POST">
+    <div class="field">
+      <label for="title">Title (optional)</label>
+      <input type="text" id="title" name="title" placeholder="e.g. A tough day at college">
+    </div>
+    <div class="field">
+      <label for="content">What's on your mind?</label>
+      <textarea id="content" name="content" rows="6" required placeholder="Write freely — this is your space."></textarea>
+    </div>
+    <button type="submit" class="btn">Save entry</button>
+  </form>
+</div>
+
+{% if entries %}
+  {% for e in entries %}
+    <div class="journal-entry">
+      <div class="journal-entry-head">
+        <div>
+          <h3>{{ e.title }}</h3>
+          <div class="journal-meta">{{ e.created_at.strftime('%d %b %Y, %I:%M %p') }}
+            <span class="sentiment-pill sentiment-{{ e.sentiment_label }}">{{ e.sentiment_label }}</span>
+          </div>
+        </div>
+        <form method="POST" action="{{ url_for('delete_journal', entry_id=e.id) }}" onsubmit="return confirm('Delete this entry?');">
+          <button type="submit" class="btn-danger-outline">Delete</button>
+        </form>
+      </div>
+      <div class="journal-content">{{ e.content }}</div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p style="color:var(--ink-soft);">No entries yet — write your first one above.</p>
+{% endif %}
+{% endblock %}

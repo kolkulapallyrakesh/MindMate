@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Resources{% endblock %}
+{% block content %}
+<h1>Resources</h1>
+
+<div class="crisis-panel">
+  <h2>If you're in crisis right now</h2>
+  <p>If you are thinking about suicide or self-harm, or are worried about your immediate safety, please reach out immediately:</p>
+  <ul>
+    {% for r in crisis.india %}
+      <li><strong>{{ r.name }}:</strong> {{ r.phone }}</li>
+    {% endfor %}
+  </ul>
+  <p>Outside India: <a href="https://www.iasp.info/resources/Crisis_Centres/" target="_blank" rel="noopener">Find a local crisis center (IASP directory)</a></p>
+  <p>If there is immediate danger to life, please contact local emergency services or go to the nearest hospital.</p>
+</div>
+
+<h2>Self-help by topic</h2>
+<div class="resource-grid">
+  <div class="resource-card">
+    <h3>😰 Anxiety &amp; Stress</h3>
+    <p>Grounding (5-4-3-2-1 technique), box breathing, and progressive muscle relaxation can help calm an anxious body and mind in the moment.</p>
+  </div>
+  <div class="resource-card">
+    <h3>😔 Low mood &amp; Depression</h3>
+    <p>Small, consistent actions — a short walk, sunlight, reaching out to one person — can help even when motivation is low. Be patient with yourself.</p>
+  </div>
+  <div class="resource-card">
+    <h3>😴 Sleep</h3>
+    <p>A consistent sleep schedule, reduced screen time before bed, and a wind-down routine improve sleep quality over time.</p>
+  </div>
+  <div class="resource-card">
+    <h3>🎓 Academic burnout</h3>
+    <p>Break tasks into small chunks, use short focused study sprints with breaks (e.g. Pomodoro technique), and protect at least one rest day a week.</p>
+  </div>
+  <div class="resource-card">
+    <h3>🤝 Loneliness</h3>
+    <p>Joining a club, volunteering, or simply messaging one person you trust can be a small but powerful first step.</p>
+  </div>
+  <div class="resource-card">
+    <h3>🧑‍⚕️ Professional help</h3>
+    <p>Most colleges have a counseling cell — consider booking a session. Therapy is a sign of strength, not weakness.</p>
+  </div>
+</div>
+{% endblock %}

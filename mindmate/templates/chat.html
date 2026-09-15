@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Chat{% endblock %}
+{% block content %}
+<h1>Talk it through</h1>
+<p class="disclaimer-strip">MindMate's chat is a rule-based support tool, not a therapist or crisis service. In an emergency, use the numbers on the <a href="{{ url_for('resources_page') }}">Resources</a> page.</p>
+
+<div class="chat-shell">
+  <div class="chat-log" id="chatLog">
+    {% if not history %}
+      <div class="msg msg-bot">Hi, I'm MindMate. How are you feeling today?</div>
+    {% endif %}
+    {% for m in history %}
+      <div class="msg {{ 'msg-user' if m.sender == 'user' else 'msg-bot' }}{{ ' crisis' if m.is_crisis else '' }}">{{ m.message }}</div>
+    {% endfor %}
+  </div>
+  <form class="chat-input-row" id="chatForm">
+    <input type="text" id="chatInput" placeholder="Type how you're feeling…" autocomplete="off" required>
+    <button type="submit" class="btn">Send</button>
+  </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}
